@@ -11,6 +11,7 @@ export default function App() {
 }
 
 const Screen = styled.div`
+  font-family: 'Raleway', "sans-serif";
   background-color: #8d10bf;
   width: 100vw;
   height: 100vh;

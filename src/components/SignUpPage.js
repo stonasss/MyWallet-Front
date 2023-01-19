@@ -77,6 +77,10 @@ const Input = styled.input`
   padding-left: 15px;
   border-style: none;
   border-radius: 5px;
+
+  ::placeholder {
+    color: #010100;
+  }
 `
 
 const Button = styled.button`
@@ -85,6 +89,7 @@ const Button = styled.button`
   width: 332px;
   height: 39px;
   font-size: 17px;
+  font-weight: 600;
   color: #fefeff;
   background-color: #a328d6;
   border-radius: 5px;
@@ -97,6 +102,7 @@ const SignIn = styled.div`
 
   p {
     font-size: 14px;
+    font-weight: 600;
     color: #fefeff;
   }
 `

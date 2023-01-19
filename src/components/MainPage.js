@@ -13,7 +13,7 @@ export default function MainPage() {
         <Route path="/" element={<LoginPage />} />
         <Route path="/cadastro" element={<SignUpPage />} />
         <Route path="/home" element={<HomePage />} />
-        <Route path="/unova-entrada" element={<Deposit />} />
+        <Route path="/nova-entrada" element={<Deposit />} />
         <Route path="/nova-saida" element={<Withdraw />} />
       </Routes>
     </BrowserRouter>
