@@ -13,6 +13,7 @@ export default function App() {
 const Screen = styled.div`
   background-color: #8d10bf;
   width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
 `;
