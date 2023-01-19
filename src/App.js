@@ -7,7 +7,7 @@ export default function App() {
     <Screen>
       <MainPage />
     </Screen>
-  );
+  )
 }
 
 const Screen = styled.div`
