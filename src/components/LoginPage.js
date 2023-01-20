@@ -1,9 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import Logo from "./Logo";
+import axios from "axios";
 
 export default function LoginPage() {
-  return(
+  const next = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  function logIn(e){
+    axios.post(`${process.env.REACT_APP_API_URL}/`, {
+      email: email,
+      password: password
+    }).then(res => {
+      console.log(res.data)
+      next("/home")
+    }).catch(err => {
+      console.log(err)
+    });
+
+    e.preventDefault()
+  } 
+
+  return (
     <>
       <Body>
         <Logo />
@@ -12,6 +32,8 @@ export default function LoginPage() {
             <Input 
               placeholder="E-mail"
               type="text"
+              value={email}
+              onChange={(e) => setEmail(e.currentTarget.value)}
               required>
             </Input>
           </Label>
@@ -20,14 +42,16 @@ export default function LoginPage() {
             <Input 
               placeholder="Senha" 
               type="text"
+              value={password}
+              onChange={(e) => setPassword(e.currentTarget.value)}
               required>
             </Input>
           </Label>
         </Form>
 
-        <Button>Entrar</Button>
+        <Button onClick={logIn}>Entrar</Button>
         
-        <SignUp><p>Primeira vez? Cadastre-se!</p></SignUp>
+        <SignUp><p>Primeira vez? <span onClick={next("/cadastro")}>Cadastre-se!</span></p></SignUp>
       </Body>
     </>
   )

@@ -16,7 +16,7 @@ export default function Withdraw() {
             required></Input>
         </Label>
 
-        <Label htmlFor="desc">
+        <Label htmlFor="description">
           <Input 
             placeholder="Descrição" 
             type="text" 

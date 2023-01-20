@@ -1,8 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import Logo from "./Logo";
+import axios from "axios";
 
 export default function SignUpPage() {
+  const next = useNavigate();
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  function signUp(e){
+    axios.post(`${process.env.REACT_APP_API_URL}/cadastro`, {
+      username,
+      email,
+      password,
+      confirmPassword
+    }).then(res => {
+      console.log(res.data)
+      next("/")
+    }).catch(err => {
+      console.log(err)
+    });
+
+    e.preventDefault()
+  }
+
   return (
     <>
       <Body>
@@ -13,6 +37,8 @@ export default function SignUpPage() {
             <Input 
               placeholder="Nome"
               type="text"
+              value={username}
+              onChange={(e) => setUsername(e.currentTarget.value)}
               required>
             </Input>
           </Label>
@@ -21,6 +47,8 @@ export default function SignUpPage() {
             <Input 
               placeholder="E-mail" 
               type="text"
+              value={email}
+              onChange={(e) => setEmail(e.currentTarget.value)}
               required>
             </Input>
           </Label>
@@ -29,20 +57,24 @@ export default function SignUpPage() {
             <Input 
               placeholder="Senha" 
               type="text"
+              value={password}
+              onChange={(e) => setPassword(e.currentTarget.value)}
               required>
             </Input>
           </Label>
 
-          <Label htmlFor="confirm-password">
+          <Label htmlFor="confirmPassword">
             <Input 
               placeholder="Confirme a senha" 
               type="text"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.currentTarget.value)}
               required>
             </Input>
           </Label>
         </Form>
 
-        <Button>Cadastrar</Button>
+        <Button onClick={signUp}>Cadastrar</Button>
 
         <SignIn><p>Já tem uma conta? Entre agora!</p></SignIn>
 
