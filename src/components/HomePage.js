@@ -61,7 +61,9 @@ export default function HomePage() {
                 <Mid>
                     <div style={{ overflow: "auto", height: "90%" }}>
                         {!info.wallet || info.wallet.length === 0 ? (
-                            <Title>Não há registros de entrada ou saída</Title>
+                            <Title>
+                                <div>Não há registros de entrada ou saída</div>
+                            </Title>
                         ) : (
                             info.wallet.map((entry, index) => (
                                 <Listing key={index}>
@@ -151,6 +153,7 @@ const Mid = styled.div`
 `;
 
 const Title = styled.div`
+    position: relative;
     display: flex;
     height: 100%;
     width: 70%;
@@ -158,6 +161,11 @@ const Title = styled.div`
     text-align: center;
     font-size: 20px;
     color: #868686;
+
+    div {
+        position: absolute;
+        top: 50%;
+    }
 `;
 
 const Footer = styled.footer`
