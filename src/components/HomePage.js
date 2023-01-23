@@ -3,6 +3,7 @@ import styled from "styled-components";
 import logoff from "../assets/logoff.png";
 import add from "../assets/add-circle-outline.svg"
 import remove from "../assets/remove-circle-outline.svg"
+import { Link } from "react-router-dom";
 
 export default function HomePage() {
     return (
@@ -18,14 +19,14 @@ export default function HomePage() {
             </Mid>
 
             <Footer>
-                <LeftBtn>
+                <StyledLink to={"/nova-entrada"}>
                     <img alt="plus" src={add}></img>
                     <p>Nova entrada</p>
-                </LeftBtn>
-                <RightBtn>
+                </StyledLink>
+                <StyledLink to={"/nova-saida"}>
                     <img alt="minus" src={remove}></img>
                     <p>Nova saída</p>
-                </RightBtn>
+                </StyledLink>
             </Footer>
         </Body>
         </>
@@ -69,33 +70,7 @@ const Footer = styled.footer`
     height: 16vh;
 `
 
-const LeftBtn = styled.button`
-    position: relative;
-    border: none;
-    border-radius: 5px;
-    width: 48%;
-    background-color: #a328d6;
-
-    img {
-        position: absolute;
-        top: 8px;
-        right: 128px;
-        padding-left: 4px;
-    }
-
-    p {
-        text-align: justify;
-        font-size: 16px;
-        font-weight: 600;
-        line-height: 19px;
-        color: #FFFFFF;
-        padding-left: 8px;
-        position: absolute;
-        bottom: 8px;
-        right: 90px;
-    }
-`
-const RightBtn = styled.button`
+const StyledLink = styled(Link)`
     position: relative;
     border: none;
     border-radius: 5px;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Logo from "./Logo";
 import axios from "axios";
 
@@ -32,8 +32,8 @@ export default function SignUpPage() {
       <Body>
         <Logo />
 
-        <Form>
-          <Label htmlFor="name">
+        <Form onSubmit={signUp}>
+          <Label htmlFor="username">
             <Input 
               placeholder="Nome"
               type="text"
@@ -72,11 +72,11 @@ export default function SignUpPage() {
               required>
             </Input>
           </Label>
+
+          <Button type="submit" id="submitbtn">Cadastrar</Button>
         </Form>
 
-        <Button onClick={signUp}>Cadastrar</Button>
-
-        <SignIn><p>Já tem uma conta? Entre agora!</p></SignIn>
+        <SignIn><p>Já tem uma conta? <StyledLink to={"/"}>Entre agora!</StyledLink></p></SignIn>
 
       </Body>
     </>
@@ -89,7 +89,7 @@ const Body = styled.div`
   flex-direction: column;
 `;
 
-const Form = styled.div`
+const Form = styled.form`
   display: flex;
   margin: auto;
   flex-direction: column;
@@ -136,5 +136,13 @@ const SignIn = styled.div`
     font-size: 14px;
     font-weight: 600;
     color: #fefeff;
+  }
+`
+
+const StyledLink = styled(Link)`
+  color: #fefeff;
+
+&:focus, &:hover, &:visited, &:link, &:active {
+        text-decoration: none;
   }
 `

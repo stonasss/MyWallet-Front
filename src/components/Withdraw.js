@@ -1,18 +1,47 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import axios from "axios";
+import { UserContext } from "../appContext/Token";
 
 export default function Withdraw() {
+  const next = useNavigate();
+  const { token } = useContext(UserContext);
+  const userToken = token;
+  const [value, setValue] = useState("");
+  const [description, setDescription] = useState("");
+
+  function newWithdraw(e){
+    const header = { headers: { Authorization : `Bearer ${userToken}` } };
+
+    axios.post(`${process.env.REACT_APP_API_URL}/nova-saida`, {
+      value: value,
+      description: description
+    },
+      header
+    ).then(res => {
+      console.log(res.data)
+      next("/home")
+    }).catch(err => {
+      console.log(err)
+    });
+
+    e.preventDefault()
+  };
+
   return (
     <Body>
       <NavBar>
         <p>Nova saída</p>
       </NavBar>
 
-      <Form>
+      <Form onSubmit={newWithdraw}>
         <Label htmlFor="value">
           <Input 
             placeholder="Valor" 
             type="text" 
+            value={value}
+            onChange={(e) => setValue(e.currentTarget.value)}
             required></Input>
         </Label>
 
@@ -20,11 +49,15 @@ export default function Withdraw() {
           <Input 
             placeholder="Descrição" 
             type="text" 
+            value={description}
+            onChange={(e) => setDescription(e.currentTarget.value)}
             required></Input>
         </Label>
+
+        <Button type="submit" id="submitbtn">Salvar saída</Button>
       </Form>
 
-      <Button>Salvar saída</Button>
+      
     </Body>
   );
 }
@@ -45,7 +78,7 @@ const NavBar = styled.header`
   }
 `;
 
-const Form = styled.div`
+const Form = styled.form`
   display: flex;
   margin: auto;
   flex-direction: column;

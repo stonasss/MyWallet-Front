@@ -10,6 +10,7 @@ export default function Logo(){
 }
 
 const Title = styled.header`
+  font-family: "Saira Stencil One";
   padding: 15px;
   text-align: center;
   font-size: 40px;

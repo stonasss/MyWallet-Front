@@ -1,22 +1,27 @@
-import React, { useState } from "react";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 import Logo from "./Logo";
 import axios from "axios";
+import { UserContext } from "../appContext/Token";
 
 export default function LoginPage() {
   const next = useNavigate();
+  const { setToken } = useContext(UserContext)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  function logIn(e){
-    axios.post(`${process.env.REACT_APP_API_URL}/`, {
+  function LogIn(e){
+    const promise = axios.post(`${process.env.REACT_APP_API_URL}/`, {
       email: email,
       password: password
-    }).then(res => {
+    })
+    promise.then(res => {
       console.log(res.data)
+      setToken(res.data)
       next("/home")
-    }).catch(err => {
+    });
+    promise.catch(err => {
       console.log(err)
     });
 
@@ -27,10 +32,11 @@ export default function LoginPage() {
     <>
       <Body>
         <Logo />
-        <Form>
+        <Form onSubmit={LogIn}>
           <Label htmlFor="email">
             <Input 
               placeholder="E-mail"
+              id="email"
               type="text"
               value={email}
               onChange={(e) => setEmail(e.currentTarget.value)}
@@ -41,17 +47,18 @@ export default function LoginPage() {
           <Label htmlFor="password">
             <Input 
               placeholder="Senha" 
+              id="password"
               type="text"
               value={password}
               onChange={(e) => setPassword(e.currentTarget.value)}
               required>
             </Input>
           </Label>
+
+          <Button type="submit" id="submitbtn">Entrar</Button>
         </Form>
 
-        <Button onClick={logIn}>Entrar</Button>
-        
-        <SignUp><p>Primeira vez? <span onClick={next("/cadastro")}>Cadastre-se!</span></p></SignUp>
+        <SignUp><p>Primeira vez? <StyledLink to={"/cadastro"}>Cadastre-se!</StyledLink></p></SignUp>
       </Body>
     </>
   )
@@ -63,7 +70,7 @@ const Body = styled.div`
   flex-direction: column;
 `
 
-const Form = styled.div`
+const Form = styled.form`
   display: flex;
   margin: auto;
   flex-direction: column;
@@ -110,5 +117,13 @@ const SignUp = styled.div`
     font-size: 14px;
     font-weight: 600;
     color: #fefeff;
+  } 
+`
+
+const StyledLink = styled(Link)`
+  color: #fefeff;
+
+&:focus, &:hover, &:visited, &:link, &:active {
+        text-decoration: none;
   }
 `

@@ -1,30 +1,63 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import styled from "styled-components";
+import { UserContext } from "../appContext/Token.js";
 
 export default function Deposit() {
+  const next = useNavigate();
+  const { token } = useContext(UserContext);
+  const userToken = token;
+  const [value, setValue] = useState("");
+  const [description, setDescription] = useState("");
+
+  function newDeposit(e){
+    const header = { headers: { Authorization : `Bearer ${userToken}` } };
+
+    axios.post(`${process.env.REACT_APP_API_URL}/nova-entrada`, {
+      value: value,
+      description: description
+    },
+      header
+    ).then(res => {
+      console.log(res.data)
+      next("/home")
+    }).catch(err => {
+      console.log(err)
+    });
+
+    e.preventDefault()
+  }
+
   return (
     <Body>
       <NavBar>
         <p>Nova entrada</p>
       </NavBar>
 
-      <Form>
+      <Form onSubmit={newDeposit}>
         <Label htmlFor="value">
           <Input 
             placeholder="Valor" 
-            type="text" 
+            type="text"
+            value={value}
+            onChange={(e) => setValue(e.currentTarget.value)}
             required></Input>
         </Label>
 
         <Label htmlFor="desc">
           <Input 
             placeholder="Descrição" 
-            type="text" 
+            type="text"
+            value={description}
+            onChange={(e) => setDescription(e.currentTarget.value)}
             required></Input>
         </Label>
+
+        <Button type="submit" id="submitbtn">Salvar entrada</Button>
       </Form>
 
-      <Button>Salvar entrada</Button>
+
     </Body>
   );
 }
@@ -45,7 +78,7 @@ const NavBar = styled.header`
   }
 `;
 
-const Form = styled.div`
+const Form = styled.form`
   display: flex;
   margin: auto;
   flex-direction: column;
