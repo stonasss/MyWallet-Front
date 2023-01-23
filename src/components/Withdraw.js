@@ -49,6 +49,7 @@ export default function Withdraw() {
                         onChange={(e) =>
                             setValue(e.currentTarget.value.replace(/,/g, "."))
                         }
+                        required
                     ></Input>
                 </Label>
 
@@ -57,7 +58,10 @@ export default function Withdraw() {
                         placeholder="Descrição"
                         type="text"
                         value={description}
-                        onChange={(e) => setDescription(e.currentTarget.value)}
+                        onChange={(e) => 
+                            setDescription(e.currentTarget.value)
+                        }
+                        required
                     ></Input>
                 </Label>
 

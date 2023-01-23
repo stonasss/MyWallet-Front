@@ -35,7 +35,7 @@ export default function HomePage() {
                 alert("Algo deu errado");
                 next("/");
             });
-    }, [info, calcFunds, next, userToken]);
+    }, [info, userToken]);
 
     function calcFunds() {
         let total = 0;
@@ -45,7 +45,7 @@ export default function HomePage() {
                 ? (total -= parseFloat(item.value))
                 : (total += parseFloat(item.value))
         );
-        setTotalFunds(total.toFixed(2));
+        setTotalFunds(total.toFixed(2).replace(/,/g, '.'));
     }
 
     return (
@@ -78,7 +78,7 @@ export default function HomePage() {
                                                         : "#c71901",
                                             }}
                                         >
-                                            {Number(entry.value).toFixed(2)}
+                                            {Number(entry.value).toFixed(2).replace(/,/g, '.')}
                                         </h3>
                                     </div>
                                 </Listing>

@@ -25,6 +25,7 @@ export default function SignUpPage() {
             })
             .catch((err) => {
                 console.log(err);
+                alert("Dados inválidos")
             });
 
         e.preventDefault();
@@ -59,7 +60,7 @@ export default function SignUpPage() {
                     <Label htmlFor="password">
                         <Input
                             placeholder="Senha"
-                            type="text"
+                            type="password"
                             value={password}
                             onChange={(e) => setPassword(e.currentTarget.value)}
                             required
@@ -69,7 +70,7 @@ export default function SignUpPage() {
                     <Label htmlFor="confirmPassword">
                         <Input
                             placeholder="Confirme a senha"
-                            type="text"
+                            type="password"
                             value={confirmPassword}
                             onChange={(e) =>
                                 setConfirmPassword(e.currentTarget.value)
