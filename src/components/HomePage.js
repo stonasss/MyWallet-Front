@@ -1,30 +1,94 @@
-import React from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 import logoff from "../assets/logoff.png";
-import add from "../assets/add-circle-outline.svg"
-import remove from "../assets/remove-circle-outline.svg"
-import { Link } from "react-router-dom";
+import plus from "../assets/plus.png";
+import minus from "../assets/minus.png";
+import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../appContext/Token";
 
 export default function HomePage() {
+    const next = useNavigate();
+    const [info, setInfo] = useState([]);
+    const [totalFunds, setTotalFunds] = useState(0);
+    const { token } = useContext(UserContext);
+    const userToken = token;
+
+    useEffect(() => {
+        const header = { headers: { Authorization : `Bearer ${userToken}` } };
+
+        axios.get(
+            `${process.env.REACT_APP_API_URL}/transactions`, 
+            header
+        ).then((res) => {
+            setInfo(res.data);
+            if (info && info.wallet && Array.isArray(info.wallet) && info.wallet.length > 0) {
+                calcFunds();
+            }
+        }).catch((err) => {
+            console.log(err);
+            alert("Algo deu errado");
+            next("/");
+        });
+
+    }, [info]);
+
+    function calcFunds(){
+        let total = 0;
+
+        info.wallet.map((item => 
+            item.type === "withdraw" ? 
+                total -= parseInt(item.value) 
+                : 
+                total += parseInt(item.value)
+            ))
+        setTotalFunds(total)
+    }
+
     return (
         <>
         <Body>
             <NavBar>
-                <Greetings>Olá, Fulano</Greetings>
-                <img alt="leave" src={logoff}></img>
+                <Greetings>Olá, {info.username}</Greetings>
+                <Link to="/"><img alt="leave" src={logoff}></img></Link>
             </NavBar>
 
             <Mid>
-                Não há registros 
+                {!info.wallet || info.wallet.length === 0 ? (
+                    <Title>Não há registros de entrada ou saída</Title>
+                ) : (
+                    info.wallet.map((entry, index) => (
+                        <Listing key={index}>
+                            <h1>{entry.date}</h1>
+                            <h2>{entry.description}</h2>
+                            <div>
+                                <h3
+                                    style={{color: entry.type === 'deposit' ? "#17ad01" : "#c71901"}}
+                                >{Number(entry.value).toFixed(2)}</h3>
+                            </div>
+                        </Listing>
+                    ))
+                )}
+
+                <Funds>
+                    {!info.wallet || info.wallet.length === 0 ? (
+                        <></>
+                        ) : (
+                    <div>
+                        <h1>SALDO</h1>
+                        <h2>{totalFunds}</h2>
+                    </div>
+                        )}
+                </Funds>
             </Mid>
 
             <Footer>
                 <StyledLink to={"/nova-entrada"}>
-                    <img alt="plus" src={add}></img>
+                    <img alt="plus" src={plus}></img>
                     <p>Nova entrada</p>
                 </StyledLink>
                 <StyledLink to={"/nova-saida"}>
-                    <img alt="minus" src={remove}></img>
+                    <img alt="minus" src={minus}></img>
                     <p>Nova saída</p>
                 </StyledLink>
             </Footer>
@@ -53,13 +117,24 @@ const Greetings = styled.h1`
     color: #FFFFFF;
 `
 const Mid = styled.div`
-    display: flex;
-    margin: auto;
+    position: relative;
+    padding-bottom: 10px;
     width: 100%;
     height: 70vh;
     border: 1px solid #FFFFFF;
     border-radius: 5px;
     background-color: white;
+    overflow: auto;
+`
+
+const Title = styled.div`
+    display: flex;
+    height: 100%;
+    width: 70%;
+    margin: auto;
+    text-align: center;
+    font-size: 20px;
+    color: #868686;
 `
 
 const Footer = styled.footer`
@@ -94,5 +169,45 @@ const StyledLink = styled(Link)`
         position: absolute;
         bottom: 8px;
         right: 90px;
+    }
+`
+const Listing = styled.div`
+    display: flex;
+    font-size: 14px;
+    margin-top: 30px;
+    position: relative;
+
+    h1{
+        position: absolute;
+        left: 15px;
+        color: #c6c6c6;
+    }
+
+    h2{
+        max-width: 54%;
+        line-break: anywhere;
+        position: absolute;
+        left: 72px;
+    }
+
+    h3{
+        position: absolute;
+        right: 15px;
+    }
+`
+
+const Funds = styled.footer`
+    display: flex;
+
+    h1 {
+        position: absolute;
+        left: 12px;
+        bottom: 12px;
+        font-weight: 700;
+    }
+    h2 {
+        position: absolute;
+        right: 12px;
+        bottom: 12px;
     }
 `
