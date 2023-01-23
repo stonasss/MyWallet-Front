@@ -29,6 +29,7 @@ export default function Withdraw() {
             })
             .catch((err) => {
                 console.log(err);
+                alert("Dados inválidos")
             });
 
         e.preventDefault();

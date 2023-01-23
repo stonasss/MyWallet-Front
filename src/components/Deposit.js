@@ -29,6 +29,7 @@ export default function Deposit() {
             })
             .catch((err) => {
                 console.log(err);
+                alert("Dados inválidos")
             });
 
         e.preventDefault();
